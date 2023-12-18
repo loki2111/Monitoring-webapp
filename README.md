@@ -131,10 +131,19 @@ Push the Docker image to ECR using the push commands on the console:
 docker push <ecr_repo_uri>:<tag>
 ```
 
+## **Part 4: Creating an EKS cluster and deploying the app using Python**
+
+### **Step 1: Create an EKS cluster**
+
+Create an EKS cluster and add node group
+
 ### **EKS Cluster: Requirements**
 1. AWS account with Admin privileges or specific privileges as requirements.
 2. AWS CLI access to kubectl utility. Awscli should be latest so install and upgrade it: sudo apt upgrade awscli
 3. Instance (to manage cluster using kubectl)
+
+### **Step 2: Create a node group**
+Create a node group in the EKS cluster.
 
 ### **Kubectl Installation:**
 1. kubectl version --client
@@ -144,7 +153,24 @@ docker push <ecr_repo_uri>:<tag>
 5. kubectl version --client
 6. aws eks update-kubeconfig --region region-code --name <eks-cluster-name>
 
+### **Step 3: Create deployment and service**
+eks.py file present in repo contains deployment and service.
 
 ### **Deploy application using python or manual manifest files:**
+make sure to edit the name of the image with your image Uri.
 
+Once you run this file by running “python3 eks.py” deployment and service will be created.
+Check by running following commands:
+kubectl get deployment -n default (check deployments)
+kubectl get service -n default (check service)
+kubectl get pods -n default (to check the pods)
 
+### **If you face issue in deployment:**
+Use following commands:
+```
+kubectl describe deploy <deployement-name>
+#This will give you detailed information of deployment where you can find the reason of failure.
+#like this you can use this command for replicaset pods.
+kubectl describe rs <replicaset-name>
+kubectl describe po <pod-name>
+```
